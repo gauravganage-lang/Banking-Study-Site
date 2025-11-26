@@ -1,58 +1,28 @@
-/* ---------- JAIIB subject tabs & syllabus ---------- */
-.subject-tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.8rem;
+// ---- JAIIB subject tab logic ----
+function initJaiibTabs() {
+  const tabs = document.querySelectorAll(".subject-tab");
+  const cards = document.querySelectorAll(".paper-card[data-paper]");
+  if (!tabs.length || !cards.length) return;
+
+  function activate(paperKey) {
+    tabs.forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.paper === paperKey);
+    });
+    cards.forEach((card) => {
+      card.classList.toggle("active", card.dataset.paper === paperKey);
+    });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      activate(tab.dataset.paper);
+    });
+  });
+
+  // default: first tab
+  activate(tabs[0].dataset.paper);
 }
 
-.subject-tab {
-  padding: 0.4rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid #d1d5db;
-  background: #f9fafb;
-  font-size: 0.85rem;
-  cursor: pointer;
-}
-
-.subject-tab.active {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
-}
-
-/* layout for paper cards */
-.syllabus-grid {
-  display: block; /* we show one card at a time */
-}
-
-.paper-card {
-  display: none;
-  background: #f9fafb;
-  border-radius: 0.75rem;
-  padding: 0.9rem;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.08);
-}
-
-.paper-card.active {
-  display: block;
-}
-
-.module-block {
-  margin-top: 0.6rem;
-}
-
-.module-block h4 {
-  font-size: 0.9rem;
-  margin-bottom: 0.25rem;
-}
-
-.module-block ul {
-  padding-left: 1.1rem;
-}
-
-.module-block li {
-  list-style: disc;
-  font-size: 0.85rem;
-  margin-bottom: 0.2rem;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  initJaiibTabs();
+});
