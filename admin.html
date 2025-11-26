@@ -24,7 +24,7 @@
   <main class="main-content admin-main">
     <!-- USERS SECTION -->
     <section id="admin-users" class="admin-section active">
-      <h2>User Management</h2>
+      <h2>👤 User Management</h2>
       <p class="section-note">Create, edit and delete student users. Admin account is fixed in code.</p>
 
       <div class="admin-card">
@@ -57,8 +57,8 @@
 
     <!-- CONTENT SECTION -->
     <section id="admin-content" class="admin-section">
-      <h2>Content Management</h2>
-      <p class="section-note">Manage notes, quizzes and assignments for students.</p>
+      <h2>📚 Content Management</h2>
+      <p class="section-note">Manage notes, quizzes and assignments for JAIIB & CAIIB.</p>
 
       <!-- NOTES -->
       <div class="admin-card">
@@ -67,11 +67,26 @@
           <input type="hidden" id="noteId" />
           <label>Paper</label>
           <select id="notePaper">
-            <option value="paper1">Paper 1 – IE & IFS</option>
-            <option value="paper2">Paper 2 – PPB</option>
-            <option value="paper3">Paper 3 – AFM</option>
-            <option value="paper4">Paper 4 – RBWM</option>
+            <!-- JAIIB -->
+            <option value="paper1">JAIIB – Paper 1 (IE & IFS)</option>
+            <option value="paper2">JAIIB – Paper 2 (PPB)</option>
+            <option value="paper3">JAIIB – Paper 3 (AFM)</option>
+            <option value="paper4">JAIIB – Paper 4 (RBWM)</option>
+            <!-- CAIIB -->
+            <option value="caiib_abm">CAIIB – ABM</option>
+            <option value="caiib_bfm">CAIIB – BFM</option>
+            <option value="caiib_brbl">CAIIB – BRBL</option>
           </select>
+
+          <label>Module (for PPB / JAIIB Paper 2)</label>
+          <select id="noteModule">
+            <option value="">(None / Not applicable)</option>
+            <option value="A">Module A</option>
+            <option value="B">Module B</option>
+            <option value="C">Module C</option>
+            <option value="D">Module D</option>
+          </select>
+
           <label>Title</label>
           <input id="noteTitle" type="text" placeholder="Topic title" required />
           <label>Content</label>
@@ -85,6 +100,7 @@
           <thead>
             <tr>
               <th>Paper</th>
+              <th>Module</th>
               <th>Title</th>
               <th>Actions</th>
             </tr>
@@ -100,10 +116,24 @@
           <input type="hidden" id="quizId" />
           <label>Paper</label>
           <select id="quizPaper">
-            <option value="paper1">Paper 1 – IE & IFS</option>
-            <option value="paper2">Paper 2 – PPB</option>
-            <option value="paper3">Paper 3 – AFM</option>
-            <option value="paper4">Paper 4 – RBWM</option>
+            <!-- JAIIB -->
+            <option value="paper1">JAIIB – Paper 1 (IE & IFS)</option>
+            <option value="paper2">JAIIB – Paper 2 (PPB)</option>
+            <option value="paper3">JAIIB – Paper 3 (AFM)</option>
+            <option value="paper4">JAIIB – Paper 4 (RBWM)</option>
+            <!-- CAIIB -->
+            <option value="caiib_abm">CAIIB – ABM</option>
+            <option value="caiib_bfm">CAIIB – BFM</option>
+            <option value="caiib_brbl">CAIIB – BRBL</option>
+          </select>
+
+          <label>Module (for PPB / JAIIB Paper 2)</label>
+          <select id="quizModule">
+            <option value="">(None / Not applicable)</option>
+            <option value="A">Module A</option>
+            <option value="B">Module B</option>
+            <option value="C">Module C</option>
+            <option value="D">Module D</option>
           </select>
 
           <label>Question</label>
@@ -123,6 +153,7 @@
           <thead>
             <tr>
               <th>Paper</th>
+              <th>Module</th>
               <th>Question</th>
               <th>Actions</th>
             </tr>
@@ -160,10 +191,10 @@
       </div>
     </section>
 
-    <!-- ANALYTICS SECTION -->
+    <!-- ANALYTICS + BACKUP SECTION -->
     <section id="admin-analytics" class="admin-section">
-      <h2>Analytics</h2>
-      <p class="section-note">Basic overview of platform usage (from localStorage).</p>
+      <h2>📊 Analytics & Backup</h2>
+      <p class="section-note">Overview of usage and option to backup/restore all data.</p>
 
       <div class="analytics-grid">
         <div class="analytics-card">
@@ -190,6 +221,26 @@
           <h3>Quiz Submissions (total)</h3>
           <p id="statSubmissions">0</p>
         </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>💾 Backup & Restore</h3>
+        <p class="section-note">
+          Download a JSON backup of users, notes, quizzes, assignments and submissions,
+          or restore from a previous backup file.
+        </p>
+
+        <button id="backupDownloadBtn" class="primary-btn" type="button">
+          Download Backup (JSON)
+        </button>
+
+        <div style="margin-top:0.8rem;">
+          <input type="file" id="backupFileInput" accept="application/json" />
+          <button id="backupRestoreBtn" class="secondary-btn" type="button">
+            Restore from JSON
+          </button>
+        </div>
+        <p id="backupStatus" class="section-note" style="margin-top:0.4rem;"></p>
       </div>
     </section>
   </main>
