@@ -24,14 +24,29 @@
   <main class="main-content student-main">
     <!-- NOTES -->
     <section id="student-notes" class="student-section active">
-      <h2>Study Notes</h2>
-      <p class="section-note">Select a paper to view available notes.</p>
+      <h2>📚 Study Notes</h2>
+      <p class="section-note">Select exam paper and (for PPB) module to view topics.</p>
 
+      <!-- Paper tabs (JAIIB + CAIIB) -->
       <div class="subject-tabs">
-        <button class="subject-tab active" data-paper="paper1">Paper 1</button>
-        <button class="subject-tab" data-paper="paper2">Paper 2</button>
-        <button class="subject-tab" data-paper="paper3">Paper 3</button>
-        <button class="subject-tab" data-paper="paper4">Paper 4</button>
+        <!-- JAIIB -->
+        <button class="subject-tab active" data-paper="paper1">JAIIB – P1</button>
+        <button class="subject-tab" data-paper="paper2">JAIIB – P2 (PPB)</button>
+        <button class="subject-tab" data-paper="paper3">JAIIB – P3</button>
+        <button class="subject-tab" data-paper="paper4">JAIIB – P4</button>
+        <!-- CAIIB -->
+        <button class="subject-tab" data-paper="caiib_abm">CAIIB – ABM</button>
+        <button class="subject-tab" data-paper="caiib_bfm">CAIIB – BFM</button>
+        <button class="subject-tab" data-paper="caiib_brbl">CAIIB – BRBL</button>
+      </div>
+
+      <!-- Module filter (used mainly for PPB) -->
+      <div class="subject-tabs" id="notesModuleTabs">
+        <button class="subject-tab active" data-module="all">All Modules</button>
+        <button class="subject-tab" data-module="A">Module A</button>
+        <button class="subject-tab" data-module="B">Module B</button>
+        <button class="subject-tab" data-module="C">Module C</button>
+        <button class="subject-tab" data-module="D">Module D</button>
       </div>
 
       <div id="studentNotesList" class="notes-list"></div>
@@ -39,14 +54,34 @@
 
     <!-- QUIZ -->
     <section id="student-quiz" class="student-section">
-      <h2>Practice Quizzes</h2>
-      <p class="section-note">Choose a paper and attempt questions. Your submissions are tracked for analytics.</p>
+      <h2>📝 Practice Quizzes</h2>
+      <p class="section-note">
+        Select paper and (for PPB) module. Your attempts are tracked to show progress.
+      </p>
 
+      <!-- Quiz progress summary -->
+      <div id="quizProgressSummary" class="progress-summary"></div>
+
+      <!-- Paper tabs (JAIIB + CAIIB) -->
       <div class="subject-tabs">
-        <button class="subject-tab active" data-paper="paper1">Paper 1</button>
-        <button class="subject-tab" data-paper="paper2">Paper 2</button>
-        <button class="subject-tab" data-paper="paper3">Paper 3</button>
-        <button class="subject-tab" data-paper="paper4">Paper 4</button>
+        <!-- JAIIB -->
+        <button class="subject-tab active" data-paper="paper1">JAIIB – P1</button>
+        <button class="subject-tab" data-paper="paper2">JAIIB – P2 (PPB)</button>
+        <button class="subject-tab" data-paper="paper3">JAIIB – P3</button>
+        <button class="subject-tab" data-paper="paper4">JAIIB – P4</button>
+        <!-- CAIIB -->
+        <button class="subject-tab" data-paper="caiib_abm">CAIIB – ABM</button>
+        <button class="subject-tab" data-paper="caiib_bfm">CAIIB – BFM</button>
+        <button class="subject-tab" data-paper="caiib_brbl">CAIIB – BRBL</button>
+      </div>
+
+      <!-- Module filter for quiz (mainly PPB) -->
+      <div class="subject-tabs" id="quizModuleTabs">
+        <button class="subject-tab active" data-module="all">All Modules</button>
+        <button class="subject-tab" data-module="A">Module A</button>
+        <button class="subject-tab" data-module="B">Module B</button>
+        <button class="subject-tab" data-module="C">Module C</button>
+        <button class="subject-tab" data-module="D">Module D</button>
       </div>
 
       <div id="quizPanel" class="quiz-card">
@@ -68,7 +103,7 @@
 
     <!-- ASSIGNMENTS -->
     <section id="student-assignments" class="student-section">
-      <h2>Assignments</h2>
+      <h2>📌 Assignments</h2>
       <p class="section-note">View assignments and mark them as submitted.</p>
 
       <div id="assignmentList" class="assignments-list"></div>
