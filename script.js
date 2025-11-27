@@ -8,6 +8,18 @@ const STORAGE_KEYS = {
   SESSION: "bp_session"
 };
 
+// Paper labels for progress display
+const PAPER_LABELS = {
+  paper1: "JAIIB P1 – IE & IFS",
+  paper2: "JAIIB P2 – PPB",
+  paper3: "JAIIB P3 – AFM",
+  paper4: "JAIIB P4 – RBWM",
+  caiib1: "CAIIB P1 – ABM",
+  caiib2: "CAIIB P2 – BFM",
+  caiib3: "CAIIB P3 – ABFM",
+  caiib4: "CAIIB P4 – BRBL"
+};
+
 // ========== GENERIC HELPERS ==========
 function loadData(key, fallback = []) {
   try {
@@ -29,7 +41,6 @@ function generateId(prefix) {
 
 // ========== USERS & SESSION ==========
 
-// Ensure default admin user exists
 function ensureDefaultAdmin() {
   let users = loadData(STORAGE_KEYS.USERS, []);
   const adminExists = users.some((u) => u.role === "admin");
@@ -44,7 +55,7 @@ function ensureDefaultAdmin() {
   }
 }
 
-// Seed initial JAIIB notes & quizzes (esp. PPB) if empty
+// Seed JAIIB notes & quizzes (with PPB modules) if empty
 function ensureSeedContent() {
   // ---------- NOTES ----------
   let notes = loadData(STORAGE_KEYS.NOTES, []);
@@ -54,6 +65,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper1",
+        module: "",
         title: "Indian Economy – Structure & Sectors",
         content:
           "• Primary sector: agriculture, allied activities, mining.\n" +
@@ -64,6 +76,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper1",
+        module: "",
         title: "RBI – Roles & Key Functions",
         content:
           "• Monetary authority – formulation & implementation of monetary policy.\n" +
@@ -74,6 +87,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper1",
+        module: "",
         title: "Components of the Indian Financial System",
         content:
           "• Financial markets: money market, capital market, forex, derivatives.\n" +
@@ -82,10 +96,11 @@ function ensureSeedContent() {
           "• Regulators: RBI, SEBI, IRDAI, PFRDA and others."
       },
 
-      // ========== PAPER 2 – PPB (MAIN FOCUS) ==========
+      // ========== PAPER 2 – PPB (MAIN FOCUS, WITH MODULES) ==========
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "A",
         title: "Banker–Customer Relationship in Detail",
         content:
           "• Debtor–creditor: when customer deposits money, bank is debtor.\n" +
@@ -97,6 +112,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "A",
         title: "Types of Deposit Accounts",
         content:
           "• Savings Bank (SB): mainly for individuals, limited withdrawals, interest paid.\n" +
@@ -108,6 +124,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "B",
         title: "KYC & AML – Core Concepts",
         content:
           "• KYC = Know Your Customer; objective is to verify identity & address and assess risk.\n" +
@@ -118,6 +135,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "B",
         title: "Negotiable Instruments – Essentials",
         content:
           "• Cheque, bill of exchange, promissory note are negotiable instruments.\n" +
@@ -128,6 +146,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "C",
         title: "NPA Classification – Overview",
         content:
           "• NPA = interest and/or instalment remains overdue for more than 90 days.\n" +
@@ -138,6 +157,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "C",
         title: "SARFAESI Act & Recovery Channels",
         content:
           "• SARFAESI allows secured creditors to enforce security without court intervention (for eligible accounts).\n" +
@@ -148,6 +168,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "D",
         title: "Payment & Settlement Systems",
         content:
           "• RTGS: high-value real-time gross settlement.\n" +
@@ -159,6 +180,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper2",
+        module: "D",
         title: "Banking Ethics & Customer Rights",
         content:
           "• Fair treatment: transparency in pricing, non-discrimination, responsible selling.\n" +
@@ -171,6 +193,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper3",
+        module: "",
         title: "Accounting Equation & Double Entry",
         content:
           "• Basic equation: Assets = Liabilities + Capital.\n" +
@@ -181,6 +204,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper3",
+        module: "",
         title: "Key Financial Ratios for Bankers",
         content:
           "• Liquidity: Current ratio, Quick ratio.\n" +
@@ -194,6 +218,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper4",
+        module: "",
         title: "Retail Banking – Advantages & Risks",
         content:
           "• For bank: diversified risk, stable income, cross-selling opportunities.\n" +
@@ -204,6 +229,7 @@ function ensureSeedContent() {
       {
         id: generateId("note"),
         paper: "paper4",
+        module: "",
         title: "Mutual Funds – Basic Types",
         content:
           "• Equity funds: higher risk, higher return potential.\n" +
@@ -212,6 +238,7 @@ function ensureSeedContent() {
           "• SIP: disciplined periodic investment.\n" +
           "• Bank staff should follow suitability & risk profiling before selling."
       }
+      // CAIIB notes can be added later via admin UI
     ];
     saveData(STORAGE_KEYS.NOTES, notes);
   }
@@ -224,6 +251,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper1",
+        module: "",
         question:
           "Which sector currently contributes the largest share to India’s GDP?",
         options: ["Primary", "Secondary", "Tertiary (services)", "Quaternary"],
@@ -232,6 +260,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper1",
+        module: "",
         question: "Which of the following is NOT an objective of monetary policy?",
         options: [
           "Price stability",
@@ -244,6 +273,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper1",
+        module: "",
         question: "Which institution regulates the capital market in India?",
         options: ["RBI", "SEBI", "IRDAI", "PFRDA"],
         answerIndex: 1
@@ -251,16 +281,18 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper1",
+        module: "",
         question:
           "Which of the following is a Development Financial Institution (DFI)?",
         options: ["NABARD", "RBI", "SEBI", "NPCI"],
         answerIndex: 0
       },
 
-      // ========== PAPER 2 – PPB (MAIN FOCUS) ==========
+      // ========== PAPER 2 – PPB (WITH MODULES) ==========
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "A",
         question:
           "Under banker–customer relationship, when a customer deposits money, the bank becomes:",
         options: [
@@ -274,6 +306,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "A",
         question:
           "Which account is most suitable for a business entity with large number of daily transactions?",
         options: [
@@ -287,6 +320,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "B",
         question:
           "KYC guidelines are primarily meant to prevent which of the following?",
         options: [
@@ -300,6 +334,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "B",
         question: "CDD in KYC stands for:",
         options: [
           "Customer Due Diligence",
@@ -312,6 +347,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "B",
         question:
           "A cheque which is payable to a specific banker only is called:",
         options: [
@@ -325,6 +361,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "B",
         question:
           "Holder in due course under the NI Act is a person who:",
         options: [
@@ -338,6 +375,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "C",
         question:
           "An account becomes Non-Performing Asset (NPA) when interest or installment remains overdue for more than:",
         options: ["30 days", "60 days", "90 days", "120 days"],
@@ -346,6 +384,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "C",
         question:
           "Which of the following is NOT a recovery channel for banks?",
         options: ["SARFAESI", "DRT", "Lok Adalat", "CRR"],
@@ -354,6 +393,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "C",
         question:
           "Which among the following is a non-fund based facility?",
         options: ["Term loan", "Cash credit", "Letter of credit", "Overdraft"],
@@ -362,6 +402,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "D",
         question:
           "In RTGS, the settlement of funds takes place:",
         options: [
@@ -375,6 +416,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "D",
         question: "IMPS is best described as:",
         options: [
           "Inward Money Processing System",
@@ -387,6 +429,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "D",
         question:
           "Which of the following is TRUE about Savings Bank accounts?",
         options: [
@@ -400,6 +443,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "D",
         question:
           "The right of a banker to adjust the debit balance in one account with credit balance in another account of the same customer is called:",
         options: [
@@ -413,6 +457,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper2",
+        module: "D",
         question:
           "Which one of the following best describes 'Ethics in Banking'?",
         options: [
@@ -428,6 +473,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper3",
+        module: "",
         question: "Which of the following is a Real Account?",
         options: [
           "Bank account",
@@ -440,6 +486,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper3",
+        module: "",
         question:
           "The main purpose of preparing a Trial Balance is to:",
         options: [
@@ -453,6 +500,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper3",
+        module: "",
         question:
           "Time value of money concept means:",
         options: [
@@ -468,6 +516,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper4",
+        module: "",
         question:
           "Home loan to individuals generally falls under which business segment?",
         options: [
@@ -481,6 +530,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper4",
+        module: "",
         question:
           "In wealth management, risk profiling of the customer is done primarily to:",
         options: [
@@ -494,6 +544,7 @@ function ensureSeedContent() {
       {
         id: generateId("quiz"),
         paper: "paper4",
+        module: "",
         question:
           "An SIP (Systematic Investment Plan) in a mutual fund is best described as:",
         options: [
@@ -504,6 +555,7 @@ function ensureSeedContent() {
         ],
         answerIndex: 1
       }
+      // CAIIB questions can be added later via admin UI
     ];
     saveData(STORAGE_KEYS.QUIZZES, quizzes);
   }
@@ -698,6 +750,7 @@ function renderNotes() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${n.paper}</td>
+      <td>${n.module || "-"}</td>
       <td>${n.title}</td>
       <td>
         <button data-action="edit" data-id="${n.id}">Edit</button>
@@ -722,11 +775,13 @@ function handleNoteForm(event) {
   let notes = loadData(STORAGE_KEYS.NOTES, []);
   const idEl = document.getElementById("noteId");
   const paperEl = document.getElementById("notePaper");
+  const moduleEl = document.getElementById("noteModule");
   const titleEl = document.getElementById("noteTitle");
   const contentEl = document.getElementById("noteContent");
 
   const id = idEl.value;
   const paper = paperEl.value;
+  const module = moduleEl.value || "";
   const title = titleEl.value.trim();
   const content = contentEl.value.trim();
 
@@ -736,6 +791,7 @@ function handleNoteForm(event) {
     const n = notes.find((x) => x.id === id);
     if (n) {
       n.paper = paper;
+      n.module = module;
       n.title = title;
       n.content = content;
     }
@@ -743,6 +799,7 @@ function handleNoteForm(event) {
     notes.push({
       id: generateId("note"),
       paper,
+      module,
       title,
       content
     });
@@ -759,6 +816,7 @@ function loadNoteIntoForm(id) {
   if (!n) return;
   document.getElementById("noteId").value = n.id;
   document.getElementById("notePaper").value = n.paper;
+  document.getElementById("noteModule").value = n.module || "";
   document.getElementById("noteTitle").value = n.title;
   document.getElementById("noteContent").value = n.content || "";
 }
@@ -775,6 +833,7 @@ function resetNoteForm() {
   document.getElementById("noteId").value = "";
   document.getElementById("noteTitle").value = "";
   document.getElementById("noteContent").value = "";
+  document.getElementById("noteModule").value = "";
 }
 
 // ========== ADMIN: QUIZZES ==========
@@ -788,6 +847,7 @@ function renderQuizzes() {
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${q.paper}</td>
+      <td>${q.module || "-"}</td>
       <td>${q.question}</td>
       <td>
         <button data-action="edit" data-id="${q.id}">Edit</button>
@@ -812,12 +872,14 @@ function handleQuizForm(event) {
   let quizzes = loadData(STORAGE_KEYS.QUIZZES, []);
   const idEl = document.getElementById("quizId");
   const paperEl = document.getElementById("quizPaper");
+  const moduleEl = document.getElementById("quizModule");
   const questionEl = document.getElementById("quizQuestion");
   const optionsEl = document.getElementById("quizOptions");
   const ansEl = document.getElementById("quizAnswerIndex");
 
   const id = idEl.value;
   const paper = paperEl.value;
+  const module = moduleEl.value || "";
   const question = questionEl.value.trim();
   const options = optionsEl.value
     .split("\n")
@@ -831,6 +893,7 @@ function handleQuizForm(event) {
     const q = quizzes.find((x) => x.id === id);
     if (q) {
       q.paper = paper;
+      q.module = module;
       q.question = question;
       q.options = options;
       q.answerIndex = answerIndex;
@@ -839,6 +902,7 @@ function handleQuizForm(event) {
     quizzes.push({
       id: generateId("quiz"),
       paper,
+      module,
       question,
       options,
       answerIndex
@@ -856,6 +920,7 @@ function loadQuizIntoForm(id) {
   if (!q) return;
   document.getElementById("quizId").value = q.id;
   document.getElementById("quizPaper").value = q.paper;
+  document.getElementById("quizModule").value = q.module || "";
   document.getElementById("quizQuestion").value = q.question;
   document.getElementById("quizOptions").value = q.options.join("\n");
   document.getElementById("quizAnswerIndex").value = q.answerIndex;
@@ -874,6 +939,7 @@ function resetQuizForm() {
   document.getElementById("quizQuestion").value = "";
   document.getElementById("quizOptions").value = "";
   document.getElementById("quizAnswerIndex").value = 0;
+  document.getElementById("quizModule").value = "";
 }
 
 // ========== ADMIN: ASSIGNMENTS ==========
@@ -996,57 +1062,141 @@ function renderAnalytics() {
     subEl.textContent = submissions.length.toString();
 }
 
+// ========== ADMIN: BACKUP / RESTORE ==========
+function exportBackup() {
+  const backup = {
+    timestamp: new Date().toISOString(),
+    data: {
+      [STORAGE_KEYS.USERS]: loadData(STORAGE_KEYS.USERS, []),
+      [STORAGE_KEYS.NOTES]: loadData(STORAGE_KEYS.NOTES, []),
+      [STORAGE_KEYS.QUIZZES]: loadData(STORAGE_KEYS.QUIZZES, []),
+      [STORAGE_KEYS.ASSIGNMENTS]: loadData(STORAGE_KEYS.ASSIGNMENTS, []),
+      [STORAGE_KEYS.SUBMISSIONS]: loadData(STORAGE_KEYS.SUBMISSIONS, [])
+    }
+  };
+
+  const blob = new Blob([JSON.stringify(backup, null, 2)], {
+    type: "application/json"
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "banking-study-backup.json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importBackupFromFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      const data = parsed.data || parsed;
+
+      if (data[STORAGE_KEYS.USERS]) saveData(STORAGE_KEYS.USERS, data[STORAGE_KEYS.USERS]);
+      if (data[STORAGE_KEYS.NOTES]) saveData(STORAGE_KEYS.NOTES, data[STORAGE_KEYS.NOTES]);
+      if (data[STORAGE_KEYS.QUIZZES]) saveData(STORAGE_KEYS.QUIZZES, data[STORAGE_KEYS.QUIZZES]);
+      if (data[STORAGE_KEYS.ASSIGNMENTS]) saveData(STORAGE_KEYS.ASSIGNMENTS, data[STORAGE_KEYS.ASSIGNMENTS]);
+      if (data[STORAGE_KEYS.SUBMISSIONS]) saveData(STORAGE_KEYS.SUBMISSIONS, data[STORAGE_KEYS.SUBMISSIONS]);
+
+      alert("Backup restored successfully. Reloading page...");
+      window.location.reload();
+    } catch (err) {
+      alert("Invalid backup file.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 // ========== STUDENT: NOTES ==========
+let currentNotesPaper = "paper1";
+let currentNotesModule = "all";
+
 function initStudentNotes() {
   const wrapper = document.getElementById("studentNotesList");
-  const tabs = document.querySelectorAll("#student-notes .subject-tab");
-  if (!wrapper || !tabs.length) return;
+  const paperTabs = document.querySelectorAll("#student-notes .subject-tabs:first-of-type .subject-tab");
+  const moduleTabs = document.querySelectorAll("#notesModuleTabs .subject-tab");
+  if (!wrapper || !paperTabs.length || !moduleTabs.length) return;
 
-  function showNotesForPaper(paper) {
-    const notes = loadData(STORAGE_KEYS.NOTES, []).filter(
-      (n) => n.paper === paper
-    );
+  function showNotes() {
+    const paper = currentNotesPaper;
+    const module = currentNotesModule;
+    const allNotes = loadData(STORAGE_KEYS.NOTES, []);
+    const filtered = allNotes.filter((n) => {
+      if (n.paper !== paper) return false;
+      if (paper === "paper2") {
+        if (module !== "all" && module && n.module !== module) return false;
+      }
+      return true;
+    });
+
     wrapper.innerHTML = "";
-    if (!notes.length) {
-      wrapper.innerHTML = "<p>No notes available for this paper yet.</p>";
+    if (!filtered.length) {
+      wrapper.innerHTML = "<p>No notes available for this selection yet.</p>";
       return;
     }
-    notes.forEach((n) => {
+    filtered.forEach((n) => {
       const div = document.createElement("div");
       div.className = "note-item";
+      const moduleTag = n.module ? `<small>Module ${n.module}</small>` : "";
       div.innerHTML = `
-        <h4>${n.title}</h4>
+        <h4>${n.title} ${moduleTag}</h4>
         <p>${(n.content || "").replace(/\n/g, "<br>")}</p>
       `;
       wrapper.appendChild(div);
     });
   }
 
-  tabs.forEach((tab) => {
+  paperTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
+      paperTabs.forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
-      showNotesForPaper(tab.dataset.paper);
+      currentNotesPaper = tab.dataset.paper;
+      showNotes();
     });
   });
 
-  showNotesForPaper(tabs[0].dataset.paper);
+  moduleTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      moduleTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentNotesModule = tab.dataset.module;
+      showNotes();
+    });
+  });
+
+  showNotes();
 }
 
 // ========== STUDENT: QUIZ ==========
 let currentQuizPaper = "paper1";
+let currentQuizModule = "all";
 let currentQuizIndex = 0;
 
 function initStudentQuiz() {
   const panel = document.getElementById("quizPanel");
-  const tabs = document.querySelectorAll("#student-quiz .subject-tab");
-  if (!panel || !tabs.length) return;
+  const paperTabs = document.querySelectorAll("#student-quiz .subject-tabs:first-of-type .subject-tab");
+  const moduleTabs = document.querySelectorAll("#quizModuleTabs .subject-tab");
+  if (!panel || !paperTabs.length || !moduleTabs.length) return;
 
-  tabs.forEach((tab) => {
+  paperTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
-      tabs.forEach((t) => t.classList.remove("active"));
+      paperTabs.forEach((t) => t.classList.remove("active"));
       tab.classList.add("active");
       currentQuizPaper = tab.dataset.paper;
+      currentQuizIndex = 0;
+      loadQuizQuestion();
+      renderQuizProgressForStudent();
+    });
+  });
+
+  moduleTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      moduleTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentQuizModule = tab.dataset.module;
       currentQuizIndex = 0;
       loadQuizQuestion();
     });
@@ -1058,12 +1208,24 @@ function initStudentQuiz() {
   if (nextBtn) nextBtn.addEventListener("click", nextQuizQuestion);
 
   loadQuizQuestion();
+  renderQuizProgressForStudent();
+}
+
+function getFilteredQuestionsForCurrentSelection() {
+  const all = loadData(STORAGE_KEYS.QUIZZES, []);
+  return all.filter((q) => {
+    if (q.paper !== currentQuizPaper) return false;
+    if (currentQuizPaper === "paper2") {
+      if (currentQuizModule !== "all" && currentQuizModule && q.module !== currentQuizModule) {
+        return false;
+      }
+    }
+    return true;
+  });
 }
 
 function loadQuizQuestion() {
-  const questions = loadData(STORAGE_KEYS.QUIZZES, []).filter(
-    (q) => q.paper === currentQuizPaper
-  );
+  const questions = getFilteredQuestionsForCurrentSelection();
   const qText = document.getElementById("quizQuestionText");
   const optDiv = document.getElementById("quizOptions");
   const feedback = document.getElementById("quizFeedback");
@@ -1071,9 +1233,10 @@ function loadQuizQuestion() {
   if (!qText || !optDiv || !feedback) return;
 
   if (!questions.length) {
-    qText.textContent = "No questions available for this paper yet.";
+    qText.textContent = "No questions available for this selection yet.";
     optDiv.innerHTML = "";
     feedback.textContent = "";
+    feedback.className = "quiz-feedback";
     return;
   }
 
@@ -1097,9 +1260,7 @@ function loadQuizQuestion() {
 }
 
 function checkQuizAnswer() {
-  const questions = loadData(STORAGE_KEYS.QUIZZES, []).filter(
-    (q) => q.paper === currentQuizPaper
-  );
+  const questions = getFilteredQuestionsForCurrentSelection();
   if (!questions.length) return;
   const q = questions[currentQuizIndex];
 
@@ -1113,7 +1274,9 @@ function checkQuizAnswer() {
   }
 
   const chosen = parseInt(selected.value, 10);
-  if (chosen === q.answerIndex) {
+  const correct = chosen === q.answerIndex;
+
+  if (correct) {
     feedback.textContent = "Correct!";
     feedback.className = "quiz-feedback correct";
   } else {
@@ -1121,7 +1284,7 @@ function checkQuizAnswer() {
     feedback.className = "quiz-feedback incorrect";
   }
 
-  // Record submission for analytics
+  // Record submission for analytics and progress
   const session = getSession();
   const submissions = loadData(STORAGE_KEYS.SUBMISSIONS, []);
   submissions.push({
@@ -1129,19 +1292,82 @@ function checkQuizAnswer() {
     quizId: q.id,
     paper: q.paper,
     studentEmail: session ? session.email : "",
-    correct: chosen === q.answerIndex,
+    correct,
     time: new Date().toISOString()
   });
   saveData(STORAGE_KEYS.SUBMISSIONS, submissions);
+  renderQuizProgressForStudent();
 }
 
 function nextQuizQuestion() {
-  const questions = loadData(STORAGE_KEYS.QUIZZES, []).filter(
-    (q) => q.paper === currentQuizPaper
-  );
+  const questions = getFilteredQuestionsForCurrentSelection();
   if (!questions.length) return;
   currentQuizIndex++;
   loadQuizQuestion();
+}
+
+// ========== STUDENT: QUIZ PROGRESS ==========
+function computeStudentQuizStats() {
+  const session = getSession();
+  if (!session) return {};
+  const submissions = loadData(STORAGE_KEYS.SUBMISSIONS, []).filter(
+    (s) => s.quizId && s.studentEmail === session.email
+  );
+  const stats = {};
+  submissions.forEach((s) => {
+    const paper = s.paper || "unknown";
+    if (!stats[paper]) {
+      stats[paper] = { attempts: 0, correct: 0 };
+    }
+    stats[paper].attempts++;
+    if (s.correct) stats[paper].correct++;
+  });
+  return stats;
+}
+
+function renderQuizProgressForStudent() {
+  const container = document.getElementById("quizProgressCards");
+  if (!container) return;
+  const stats = computeStudentQuizStats();
+
+  // Build a fixed order list of papers we care about
+  const paperOrder = [
+    "paper1",
+    "paper2",
+    "paper3",
+    "paper4",
+    "caiib1",
+    "caiib2",
+    "caiib3",
+    "caiib4"
+  ];
+
+  container.innerHTML = "";
+  paperOrder.forEach((paper) => {
+    if (!PAPER_LABELS[paper]) return;
+    const s = stats[paper];
+    let attempts = 0;
+    let correct = 0;
+    let percentText = "No attempts yet";
+
+    if (s && s.attempts > 0) {
+      attempts = s.attempts;
+      correct = s.correct;
+      const pct = Math.round((correct * 100) / attempts);
+      percentText = `${correct}/${attempts} correct (${pct}%)`;
+    }
+
+    const card = document.createElement("div");
+    card.className = "analytics-card";
+    card.innerHTML = `
+      <h3>${PAPER_LABELS[paper]}</h3>
+      <p>${s && s.attempts > 0 ? `${correct}/${attempts}` : "—"}</p>
+      <div style="font-size:0.8rem; color:#9ca3af; margin-top:0.2rem;">
+        ${percentText}
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
 
 // ========== STUDENT: ASSIGNMENTS ==========
@@ -1210,7 +1436,7 @@ function markAssignmentSubmitted(assignmentId) {
 // ========== INIT ON PAGE LOAD ==========
 document.addEventListener("DOMContentLoaded", () => {
   ensureDefaultAdmin();
-  ensureSeedContent(); // fill default JAIIB notes + MCQs
+  ensureSeedContent();
   enforceRole();
 
   const session = getSession();
@@ -1264,6 +1490,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Analytics
     renderAnalytics();
+
+    // Backup & restore
+    const backupBtn = document.getElementById("backupBtn");
+    const restoreInput = document.getElementById("restoreInput");
+    if (backupBtn) backupBtn.addEventListener("click", exportBackup);
+    if (restoreInput) {
+      restoreInput.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) importBackupFromFile(file);
+      });
+    }
   }
 
   // STUDENT PAGE
