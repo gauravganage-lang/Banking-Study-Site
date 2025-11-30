@@ -1,30 +1,124 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Login</title>
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <title>Login - Banking Prep</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { box-sizing: border-box; font-family: system-ui, sans-serif; }
+        body {
+            margin: 0; padding: 0; background: #0b1020; color: #f5f7ff;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+        .login-container {
+            width: 90%; max-width: 400px;
+            background: radial-gradient(circle at top left, #24325c, #15192b);
+            border-radius: 16px; padding: 2rem; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        h1 { margin-top: 0; font-size: 1.5rem; text-align: center; color: #4ad4ff; }
+        label { display: block; font-size: 0.85rem; margin-bottom: 0.2rem; color: #d7ddff; }
+        input {
+            width: 100%; padding: 0.5rem; margin-bottom: 1rem; border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.12); background: rgba(3, 5, 15, 0.9);
+            color: #f5f7ff; font-size: 0.9rem; outline: none;
+        }
+        .btn-primary {
+            width: 100%; border: none; border-radius: 999px; padding: 0.75rem;
+            font-size: 1rem; cursor: pointer; font-weight: 600; margin-top: 1rem;
+            background: linear-gradient(135deg, #4ad4ff, #00ffbf); color: #04101b;
+        }
+        #message {
+            text-align: center; color: #ff9ea9; margin-bottom: 1rem; font-size: 0.85rem;
+            display: none;
+        }
+        .admin-link {
+            text-align: center; margin-top: 1.5rem; font-size: 0.8rem;
+        }
+        .admin-link a {
+            color: #b8c4ff; text-decoration: none;
+        }
+        /* NEW STYLE FOR DEVELOPER CREDIT */
+        .developer-credit {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: #5d709e; /* Subtle blue/gray color */
+        }
+    </style>
 </head>
+<body>
 
-<body class="login-body">
-
-  <div class="login-card">
-    <h2>Banking Study Portal</h2>
-    <h4>Login</h4>
-
+<div class="login-container">
+    <h1>Banking Prep Login</h1>
+    <div id="message"></div>
     <form id="loginForm">
-      <label>Email</label>
-      <input id="email" type="text" required>
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="user@example.com">
 
-      <label>Password</label>
-      <input id="password" type="password" required>
-
-      <button type="submit" class="primary-btn">Login</button>
-
-      <p id="loginError" class="error-text"></p>
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
+        
+        <button type="submit" class="btn-primary">Log In</button>
     </form>
-  </div>
 
+    <div class="admin-link">
+        <a href="admin.html">Go to Admin Panel (For User Creation)</a>
+    </div>
+</div>
+
+<!-- DEVELOPER CREDIT ADDED HERE -->
+<div class="developer-credit">Developed and managed by Gaurav G.</div>
+
+<script>
+    const STORAGE_KEYS = { USERS: "bp_users", CURRENT_USER: "bp_current_user" };
+
+    function loadData(key, fallback) {
+        try {
+            const raw = localStorage.getItem(key);
+            if (!raw) return fallback;
+            return JSON.parse(raw);
+        } catch (e) { console.error("Error loading", key, e); return fallback; }
+    }
+
+    function getUsers() { return loadData(STORAGE_KEYS.USERS, []); }
+    
+    // Check if user is already logged in
+    if (localStorage.getItem(STORAGE_KEYS.CURRENT_USER)) {
+        window.location.replace('index.html');
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value.trim();
+        const messageEl = document.getElementById('message');
+        
+        messageEl.style.display = 'none';
+
+        const users = getUsers();
+        const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+        if (user && user.password === password) {
+            // Success: Set session token and redirect
+            localStorage.setItem(STORAGE_KEYS.CURRENT_USER, user.email);
+            window.location.replace('index.html');
+        } else {
+            // Failure: Show error message
+            messageEl.textContent = 'Invalid email or password. Please try again.';
+            messageEl.style.display = 'block';
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const users = getUsers();
+        if (users.length === 0) {
+             document.getElementById('message').innerHTML = 'No users found. Please create one in the <a href="admin.html">Admin Panel</a>.';
+             document.getElementById('message').style.display = 'block';
+             document.getElementById('message').style.color = '#fff0b3';
+        }
+    });
+</script>
 </body>
 </html>
