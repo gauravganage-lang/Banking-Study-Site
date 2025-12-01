@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard - Banking Prep</title>
+    <title>Login - Banking Prep Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* Light Theme Color Palette */
+        /* Light Theme Color Palette - Consistent across all pages */
         :root {
             --color-bg-primary: #f8f9fa;
             --color-card-bg: #ffffff;
@@ -13,96 +13,185 @@
             --color-text-primary: #212529;
             --color-text-secondary: #5c6773;
             --color-accent-blue: #007bff;
-            --color-accent-green: #28a745;
             --color-accent-red: #dc3545;
+            --color-input-bg: #ffffff;
+            --color-input-border: #ced4da;
         }
+
         * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
         body {
             margin: 0; padding: 0; background: var(--color-bg-primary); color: var(--color-text-primary);
-            min-height: 100vh; padding: 2rem;
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
         }
-        .dashboard-header {
-            max-width: 800px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-            padding-bottom: 1.5rem; border-bottom: 1px solid #ced4da;
-        }
-        h1 { margin: 0; font-size: 2rem; color: var(--color-accent-blue); }
-        p { color: var(--color-text-secondary); }
-        .user-info { font-size: 0.9rem; }
-        .user-info p { color: var(--color-text-primary); margin: 0 0 0.5rem; }
-        .user-info span { font-weight: 600; color: var(--color-accent-blue); }
-
-        .logout-btn {
-            background: var(--color-accent-red); color: white; border: none; border-radius: 999px;
-            padding: 0.5rem 1rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;
-            transition: background-color 0.2s;
-        }
-        .logout-btn:hover { background: #bd2130; }
-
-        .content-card {
-            max-width: 800px; margin: 2rem auto;
+        .login-container {
+            width: 90%; max-width: 400px;
             background: var(--color-card-bg);
-            border-radius: 12px; padding: 1.5rem;
-            box-shadow: 0 4px 15px var(--color-card-shadow);
+            border-radius: 12px; padding: 2rem; 
+            box-shadow: 0 8px 25px var(--color-card-shadow);
             border: 1px solid #e9ecef;
         }
-        .content-card h2 { color: var(--color-accent-green); }
+        h1 { margin-top: 0; font-size: 1.8rem; text-align: center; color: var(--color-accent-blue); }
+        label { display: block; font-size: 0.85rem; margin-bottom: 0.2rem; color: var(--color-text-primary); font-weight: 600; }
+        input {
+            width: 100%; padding: 0.6rem; margin-bottom: 1rem; border-radius: 6px;
+            border: 1px solid var(--color-input-border); background: var(--color-input-bg);
+            color: var(--color-text-primary); font-size: 0.95rem; outline: none;
+        }
+        input:focus { border-color: var(--color-accent-blue); box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25); }
+        
+        .btn-primary {
+            width: 100%; border: none; border-radius: 6px; padding: 0.75rem;
+            font-size: 1rem; cursor: pointer; font-weight: 600; margin-top: 1rem;
+            background: var(--color-accent-blue); color: #ffffff;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover { background: #0056b3; }
+
+        #loginError {
+            text-align: center; color: var(--color-accent-red); margin-bottom: 1rem; font-size: 0.85rem;
+            display: none;
+        }
+        .admin-link {
+            text-align: center; margin-top: 1.5rem; font-size: 0.8rem;
+        }
+        .admin-link a {
+            color: var(--color-accent-blue); text-decoration: none;
+            transition: color 0.2s;
+        }
+        .admin-link a:hover { color: #0056b3; text-decoration: underline; }
+
+        .developer-credit {
+            position: fixed;
+            bottom: 10px;
+            right: 15px;
+            font-size: 0.7rem;
+            color: var(--color-text-secondary); 
+            opacity: 0.7;
+        }
     </style>
 </head>
 <body>
 
-<div class="dashboard-header">
-    <h1>Welcome to the Dashboard</h1>
-    <div class="user-info">
-        <p>Logged in as: <span id="userEmailDisplay">...</span></p>
-        <button id="logoutBtn" class="logout-btn">Log Out</button>
+<div class="login-container">
+    <h1>Banking Prep Portal Login</h1>
+    <div id="loginError"></div>
+    <form id="loginForm">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="admin@bank.com or student@bank.com">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
+        
+        <button type="submit" class="btn-primary">Log In</button>
+    </form>
+
+    <div class="admin-link">
+        <p>Demo Admin: admin@bank.com / admin123</p>
+        <p>Demo Student: student@bank.com / student123</p>
     </div>
 </div>
 
-<div class="content-card">
-    <h2>Protected Content</h2>
-    <p>This area is secure. You are successfully authenticated and viewing content specific to your banking prep level.</p>
-</div>
+<div class="developer-credit">Developed and managed by Gaurav G.</div>
 
 <script>
-    const STORAGE_KEYS = { USERS: "bp_users", CURRENT_USER: "bp_current_user" };
+    // Merged storage keys from all files
+    const STORAGE_KEYS = { 
+        USERS: "bp_users", 
+        SESSION: "bp_session", 
+        NOTES: "bp_notes", 
+        QUIZZES: "bp_quizzes",
+        SUBJECTS: "bp_subjects", MODULES: "bp_modules",
+        ASSIGNMENTS: "bp_assignments", SUBMISSIONS: "bp_submissions"
+    };
 
-    function loadData(key, fallback) {
+    // --- UTILITY FUNCTIONS ---
+    function loadData(key, fallback = []) {
         try {
             const raw = localStorage.getItem(key);
             if (!raw) return fallback;
             return JSON.parse(raw);
-        } catch (e) { console.error("Error loading", key, e); return fallback; }
+        } catch (e) { return fallback; }
     }
 
-    function getUsers() { return loadData(STORAGE_KEYS.USERS, []); }
+    function saveData(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
     
-    // --- AUTH CHECK ---
-    const userEmail = localStorage.getItem(STORAGE_KEYS.CURRENT_USER);
-    if (!userEmail) {
-        // If no session token is found, redirect to login
-        window.location.href = 'login.html'; // FIXED: Removed './' from relative path
+    function generateId(prefix) {
+        return prefix + "_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+    }
+    
+    // --- USER & SESSION MANAGEMENT ---
+    function getUsers() { return loadData(STORAGE_KEYS.USERS, []); }
+    function setSession(session) {
+        if (!session) {
+            localStorage.removeItem(STORAGE_KEYS.SESSION);
+        } else {
+            saveData(STORAGE_KEYS.SESSION, session);
+        }
     }
 
-    // --- DISPLAY USER INFO ---
-    const users = getUsers();
-    const currentUser = users.find(u => u.email === userEmail);
+    function ensureDefaultAdminAndContent() {
+        let users = getUsers();
+        // Ensure default admin/student for demo
+        if (!users.some(u => u.email === "admin@bank.com")) {
+             users.push({ id: generateId("user"), email: "admin@bank.com", password: "admin123", role: "admin", name: "Admin User" });
+        }
+        if (!users.some(u => u.email === "student@bank.com")) {
+             users.push({ id: generateId("user"), email: "student@bank.com", password: "student123", role: "student", name: "Demo Student" });
+        }
+        saveData(STORAGE_KEYS.USERS, users);
+    }
+    
+    function handleLogin(event) {
+        event.preventDefault();
+        const emailEl = document.getElementById("email");
+        const passEl = document.getElementById("password");
+        const errorEl = document.getElementById("loginError");
+        const email = emailEl.value.trim().toLowerCase();
+        const password = passEl.value.trim();
 
-    if (currentUser) {
-        document.getElementById('userEmailDisplay').textContent = `${currentUser.name} (${currentUser.role})`;
-    } else {
-        // If token exists but user is not in the database (e.g., deleted), force logout
-        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-        window.location.href = 'login.html'; // FIXED: Removed './' from relative path
+        errorEl.style.display = 'none';
+
+        let users = getUsers();
+        const user = users.find(
+            (u) => u.email.toLowerCase() === email && u.password === password
+        );
+
+        if (!user) {
+            errorEl.textContent = "Invalid email or password.";
+            errorEl.style.display = 'block';
+            return;
+        }
+
+        // Set session token (saving role/email)
+        setSession({ email: user.email, role: user.role, userId: user.id, name: user.name });
+
+        // Route based on role
+        if (user.role === "admin") {
+            window.location.href = "admin.html";
+        } else {
+            // Student/Guest goes to the main dashboard
+            window.location.href = "student.html";
+        }
     }
 
-
-    // --- LOGOUT FUNCTIONALITY ---
-    document.getElementById('logoutBtn').addEventListener('click', function() {
-        localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-        window.location.href = 'login.html'; // FIXED: Removed './' from relative path
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        ensureDefaultAdminAndContent();
+        
+        // Check if user is already logged in and redirect
+        const session = loadData(STORAGE_KEYS.SESSION, null);
+        if (session) {
+             if (session.role === "admin") {
+                window.location.href = "admin.html";
+            } else {
+                window.location.href = "student.html";
+            }
+        }
+        
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
     });
-
 </script>
 </body>
 </html>
