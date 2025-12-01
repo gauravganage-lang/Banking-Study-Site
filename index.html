@@ -1,48 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Banking Study Portal | Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #9ca3af;
+            border-radius: 4px;
+        }
+    </style>
 </head>
-<body data-page="login">
-  <main class="login-main">
-    <section class="login-card">
-      <h1>Banking Study Portal</h1>
-      <p class="login-subtitle">Login as Admin or Student</p>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-      <form id="loginForm" class="login-form">
-        <label for="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="you@bank.com"
-          required
-        />
+    <!-- Main Container -->
+    <div id="app-container" class="w-full max-w-2xl bg-white shadow-xl rounded-xl p-8 transition-all duration-300">
+        <h1 class="text-3xl font-bold text-gray-800 text-center mb-6">Secure App Dashboard</h1>
 
-        <label for="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Enter password"
-          required
-        />
+        <!-- Loading Indicator -->
+        <div id="loading-view" class="text-center p-10">
+            <svg class="animate-spin h-8 w-8 text-indigo-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p class="mt-4 text-gray-600">Initializing Firebase...</p>
+        </div>
 
-        <button type="submit" class="primary-btn login-btn">
-          Login
-        </button>
+        <!-- Login View (Initially Hidden) -->
+        <div id="login-view" class="hidden">
+            <div class="text-center p-6 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-lg font-semibold text-red-700">Access Denied</p>
+                <p class="text-sm text-red-600 mt-2">You must sign in to view the dashboard content.</p>
+                <button id="login-button" class="mt-4 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out transform hover:scale-[1.01]">
+                    Sign In Anonymously
+                </button>
+                <p class="text-xs text-gray-500 mt-4">For demonstration, we use anonymous sign-in.</p>
+            </div>
+        </div>
 
-        <p id="loginError" class="error-text"></p>
-      </form>
+        <!-- Dashboard View (Initially Hidden) -->
+        <div id="dashboard-view" class="hidden">
+            <div class="space-y-6">
+                <div class="p-6 bg-indigo-50 border border-indigo-200 rounded-lg">
+                    <p class="text-xl font-bold text-indigo-800">Welcome to the Dashboard!</p>
+                    <p class="text-sm text-indigo-700 mt-2">Your content is secured and loaded successfully.</p>
+                </div>
 
-      <div class="admin-hint">
-        <strong>Default Admin (first time):</strong><br />
-        Email: <code>admin@bank.com</code><br />
-        Password: <code>admin123</code>
-      </div>
-    </section>
-  </main>
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <p class="text-sm font-medium text-gray-700">Your User ID (for collaboration):</p>
+                    <code id="user-id-display" class="block mt-1 p-2 bg-white rounded text-xs text-gray-900 overflow-x-auto break-all"></code>
+                </div>
+
+                <div id="dashboard-content" class="h-48 overflow-y-auto p-4 border rounded-lg bg-white shadow-inner">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">Mock Data Feed</h3>
+                    <!-- Mock content -->
+                    <p class="text-sm text-gray-600">Report generated on: <span id="report-time"></span></p>
+                    <ul class="list-disc list-inside mt-2 text-sm text-gray-500 space-y-1">
+                        <li>Project Phoenix status: Green</li>
+                        <li>Q3 revenue projection: \$1.2M</li>
+                        <li>Pending tasks: 3</li>
+                        <li>Server load average: 45%</li>
+                    </ul>
+                </div>
+
+                <button id="logout-button" class="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out">
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase Imports and Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase variables
+        let app;
+        let auth;
+        let db;
+        let userId = null;
+        let isAuthReady = false;
+
+        // --- View Management Helper ---
+        function showView(viewId) {
+            const views = ['loading-view', 'login-view', 'dashboard-view'];
+            views.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.classList.toggle('hidden', id !== viewId);
+                }
+            });
+        }
+
+        // --- Core Application Functions ---
+
+        function initializeDashboard() {
+            if (!isAuthReady || !userId) {
+                // Safely switch the internal view to the login/access denied message.
+                console.log("User not authenticated or authentication not ready. Showing login view.");
+                showView('login-view');
+                return;
+            }
+
+            console.log("User authenticated. Initializing dashboard view.");
+            
+            // 1. Update UI with user info
+            document.getElementById('user-id-display').textContent = userId;
+            document.getElementById('report-time').textContent = new Date().toLocaleString();
+
+            // 2. Start data fetching (Mock Firestore data subscription)
+            // Define paths using the mandatory __app_id variable
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+            const publicDataPath = `/artifacts/${appId}/public/data/dashboard_status/global_status`;
+            
+            const docRef = doc(db, publicDataPath);
+            
+            // Listen for real-time changes
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    console.log("Current data:", data);
+                    const contentDiv = document.getElementById('dashboard-content');
+                    contentDiv.innerHTML = `
+                        <h3 class="text-lg font-semibold mb-2 text-gray-800">Real-time Status Update</h3>
+                        <p class="text-sm text-gray-600">Last updated: ${new Date().toLocaleTimeString()}</p>
+                        <p class="mt-2 text-base font-bold text-green-600">System Health: ${data.health || 'Unknown'}</p>
+                        <p class="text-sm text-gray-500">Active Users: ${data.activeUsers || 0}</p>
+                        <p class="text-xs text-gray-500 mt-2">Firestore Path: ${publicDataPath}</p>
+                    `;
+                } else {
+                    console.log("No dashboard status data found. Setting initial data.");
+                    // Initialize some mock data if it doesn't exist
+                    setDoc(docRef, { 
+                        health: 'Operational', 
+                        activeUsers: 1, 
+                        lastUpdate: Date.now() 
+                    }, { merge: true }).catch(e => console.error("Error setting initial data:", e));
+                }
+            }, (error) => {
+                console.error("Firestore subscription error:", error);
+                // Handle potential permission errors gracefully
+                document.getElementById('dashboard-content').innerHTML = `<p class="text-red-500">Error loading data: Check console for details.</p>`;
+            });
+
+
+            // 3. Show the dashboard view
+            showView('dashboard-view');
+        }
+
+        async function initFirebase() {
+            // Get mandatory global variables
+            const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+            const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+            if (Object.keys(firebaseConfig).length === 0) {
+                console.error("Firebase config not found. Cannot initialize.");
+                showView('login-view'); // Show login view as a fallback
+                return;
+            }
+            
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            db = getFirestore(app);
+
+            // Set up Authentication State Listener
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    userId = user.uid;
+                    isAuthReady = true;
+                    console.log("User authenticated:", userId);
+                    initializeDashboard();
+                } else {
+                    userId = null;
+                    isAuthReady = true;
+                    console.log("User signed out.");
+                    initializeDashboard(); // This will now correctly route to the login view
+                }
+            });
+
+            // Perform initial sign-in attempt
+            try {
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log("Signed in with custom token.");
+                } else {
+                    // Fallback to anonymous sign-in if token is unavailable
+                    await signInAnonymously(auth);
+                    console.log("Signed in anonymously.");
+                }
+            } catch (error) {
+                console.error("Authentication error:", error.message);
+                // If sign-in fails, the onAuthStateChanged listener will eventually handle the unauthenticated state.
+            }
+        }
+
+        // --- Event Listeners ---
+        document.addEventListener('click', async (e) => {
+            if (e.target.id === 'logout-button') {
+                try {
+                    await signOut(auth);
+                    // The onAuthStateChanged listener handles the view switch to 'login-view' automatically
+                    console.log("Sign out successful.");
+                } catch (error) {
+                    console.error("Sign out error:", error.message);
+                }
+            } else if (e.target.id === 'login-button') {
+                 // Attempt to re-sign in anonymously if the user clicks the button
+                try {
+                    await signInAnonymously(auth);
+                } catch (error) {
+                    console.error("Anonymous sign in failed:", error.message);
+                    alert("Could not sign in. Check console for details.");
+                }
+            }
+        });
+
+        // Initialize the application on load
+        window.onload = initFirebase;
+    </script>
+
 </body>
 </html>
