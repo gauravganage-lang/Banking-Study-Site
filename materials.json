@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "title": "Introduction to Web Hosting",
+        "topic": "Cloud Deployment",
+        "description": "A basic guide to getting your site live on free cloud platforms like Netlify/Vercel.",
+        "link": "https://www.google.com/search?q=free+web+hosting+guide",
+        "status": "Active"
+    },
+    {
+        "id": 2,
+        "title": "CSS Styling for Beginners",
+        "topic": "Frontend Basics",
+        "description": "Learn how to use colors, fonts, and box-shadows to create a professional look.",
+        "link": "https://www.google.com/search?q=css+tutorial+for+beginners",
+        "status": "Active"
+    },
+    {
+        "id": 3,
+        "title": "Advanced JavaScript Concepts",
+        "topic": "Programming",
+        "description": "Understanding asynchronous operations, promises, and fetching data.",
+        "link": "https://www.google.com/search?q=javascript+promises+tutorial",
+        "status": "Active"
+    },
+    {
+        "id": 4,
+        "title": "Database Fundamentals",
+        "topic": "Backend",
+        "description": "An introduction to SQL and NoSQL databases like MongoDB.",
+        "link": "https://www.google.com/search?q=database+fundamentals+for+beginners",
+        "status": "Inactive"
+    }
+]
