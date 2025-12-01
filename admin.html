@@ -5,24 +5,40 @@
     <title>Banking Prep Admin Panel (Secure Setup)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
+        /* Light Theme Color Palette */
+        :root {
+            --color-bg-primary: #f8f9fa; /* Light White */
+            --color-bg-secondary: #e9ecef; /* Very Light Gray */
+            --color-card-bg: #ffffff; /* White Card */
+            --color-card-shadow: rgba(0, 0, 0, 0.08);
+            --color-header-bg: linear-gradient(120deg, #375a7f, #4a75a3, #375a7f); /* Blue Gradient Header */
+            --color-text-primary: #212529; /* Dark Gray/Black */
+            --color-text-secondary: #5c6773; /* Medium Gray */
+            --color-accent-blue: #007bff; /* Primary Blue */
+            --color-accent-green: #28a745; /* Success Green */
+            --color-accent-red: #dc3545; /* Danger Red */
+            --color-input-bg: #ffffff;
+            --color-input-border: #ced4da;
+        }
+
         * {
             box-sizing: border-box;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
                 sans-serif;
         }
         body {
             margin: 0;
             padding: 0;
-            background: #0b1020;
-            color: #f5f7ff;
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
         }
         header {
-            background: linear-gradient(120deg, #1c2750, #233264, #1c2750);
+            background: var(--color-header-bg);
             padding: 1rem 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 10;
@@ -31,19 +47,20 @@
             margin: 0;
             font-size: 1.3rem;
             letter-spacing: 0.04em;
+            color: #ffffff;
         }
         header span {
             font-size: 0.8rem;
-            color: #b8c4ff;
+            color: #b8c4ff; /* Light color for contrast */
         }
         .tag {
             display: inline-block;
             padding: 0.22rem 0.6rem;
             border-radius: 999px;
             font-size: 0.72rem;
-            background: rgba(0, 255, 204, 0.12);
-            color: #55ffc5;
-            border: 1px solid rgba(0, 255, 204, 0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.5);
             margin-left: 0.75rem;
         }
         .container {
@@ -62,22 +79,26 @@
             }
         }
         .card {
-            background: radial-gradient(circle at top left, #24325c, #15192b);
-            border-radius: 16px;
+            background: var(--color-card-bg);
+            border-radius: 12px;
             padding: 1rem 1.1rem 1.1rem;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 4px 15px var(--color-card-shadow);
+            border: 1px solid var(--color-bg-secondary);
         }
         .card h2 {
             margin: 0 0 0.25rem;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            color: var(--color-accent-blue);
         }
         .card h3 {
-            margin: 0.3rem 0 0.3rem;
-            font-size: 0.98rem;
+            margin: 0.5rem 0 0.3rem;
+            font-size: 1rem;
+            border-bottom: 1px solid var(--color-bg-secondary);
+            padding-bottom: 0.2rem;
+            color: var(--color-text-primary);
         }
         .pill {
             display: inline-flex;
@@ -86,8 +107,8 @@
             font-size: 0.7rem;
             padding: 0.18rem 0.5rem;
             border-radius: 999px;
-            background: rgba(99, 179, 255, 0.14);
-            color: #c3d9ff;
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--color-accent-blue);
         }
         .pill span {
             font-size: 0.6rem;
@@ -96,39 +117,40 @@
         p.section-note {
             margin: 0 0 0.7rem;
             font-size: 0.8rem;
-            color: #a8b4ff;
+            color: var(--color-text-secondary);
         }
         form {
             margin-bottom: 0.75rem;
             padding: 0.6rem 0.7rem;
-            border-radius: 12px;
-            background: rgba(5, 7, 18, 0.45);
-            border: 1px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            background: var(--color-bg-secondary);
+            border: 1px dashed var(--color-input-border);
         }
         label {
             display: block;
             font-size: 0.75rem;
             margin-bottom: 0.1rem;
-            color: #d7ddff;
+            color: var(--color-text-primary);
+            font-weight: 600;
         }
         input,
         select,
         textarea {
             width: 100%;
-            padding: 0.38rem 0.5rem;
-            margin-bottom: 0.35rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            background: rgba(3, 5, 15, 0.9);
-            color: #f5f7ff;
-            font-size: 0.78rem;
+            padding: 0.4rem 0.6rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border: 1px solid var(--color-input-border);
+            background: var(--color-input-bg);
+            color: var(--color-text-primary);
+            font-size: 0.85rem;
             outline: none;
         }
         input:focus,
         select:focus,
         textarea:focus {
-            border-color: #65d9ff;
-            box-shadow: 0 0 0 1px rgba(101, 217, 255, 0.4);
+            border-color: var(--color-accent-blue);
+            box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
         }
         textarea {
             resize: vertical;
@@ -144,88 +166,88 @@
         button {
             border: none;
             border-radius: 999px;
-            padding: 0.35rem 0.9rem;
-            font-size: 0.78rem;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             gap: 0.3rem;
+            transition: background-color 0.2s;
         }
         .btn-primary {
-            background: linear-gradient(135deg, #4ad4ff, #00ffbf);
-            color: #04101b;
+            background: var(--color-accent-blue);
+            color: #ffffff;
             font-weight: 600;
         }
+        .btn-primary:hover { background: #0056b3; }
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: #dbe2ff;
+            background: var(--color-bg-secondary);
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-input-border);
         }
+        .btn-secondary:hover { background: #d3d7db; }
         .btn-danger {
-            background: rgba(255, 77, 109, 0.18);
-            color: #ff9ea9;
+            background: var(--color-accent-red);
+            color: #ffffff;
         }
+        .btn-danger:hover { background: #bd2130; }
         .btn-sm {
-            padding: 0.18rem 0.6rem;
-            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            font-size: 0.75rem;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 0.3rem;
-            font-size: 0.76rem;
+            font-size: 0.8rem;
         }
         th,
         td {
-            padding: 0.3rem 0.4rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.4rem 0.6rem;
+            border-bottom: 1px solid var(--color-bg-secondary);
             vertical-align: top;
         }
         th {
             text-align: left;
             font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: #aab7ff;
-            background: rgba(10, 17, 42, 0.9);
+            letter-spacing: 0.05em;
+            color: var(--color-text-secondary);
+            background: var(--color-bg-secondary);
             position: sticky;
             top: 0;
             z-index: 1;
         }
         tbody tr:nth-child(even) {
-            background: rgba(255, 255, 255, 0.02);
+            background: #f1f1f1;
         }
         .badge {
             display: inline-block;
             padding: 0.04rem 0.4rem;
-            border-radius: 999px;
-            font-size: 0.65rem;
-            background: rgba(0, 255, 204, 0.1);
-            color: #8cffdf;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            background: rgba(0, 123, 255, 0.1);
+            color: var(--color-accent-blue);
         }
         .muted {
-            color: #7f8acd;
-            font-size: 0.72rem;
-        }
-        .two-col {
-            display: flex;
-            gap: 0.55rem;
-            flex-wrap: wrap;
+            color: var(--color-text-secondary);
+            font-size: 0.75rem;
         }
         .two-col > div {
-            flex: 1 1 120px;
+            flex: 1 1 150px;
         }
         .smallhint {
             font-size: 0.7rem;
-            color: #98a4ff;
+            color: var(--color-text-secondary);
             margin: 0 0 0.25rem;
         }
         .warning-text {
-            color: #ff9ea9;
+            color: var(--color-accent-red);
             font-size: 0.7rem;
             margin-top: 0.5rem;
         }
         .logout-btn {
-            background: #ff4d6d; 
+            background: var(--color-accent-red); 
             color: white; 
             border: none; 
             border-radius: 999px;
@@ -234,6 +256,7 @@
             font-size: 0.85rem; 
             font-weight: 600;
         }
+        .logout-btn:hover { background: #bd2130; }
     </style>
 </head>
 <body>
@@ -245,7 +268,6 @@
             </h1>
             <span>Manage subjects, quizzes, and secure user accounts.</span>
         </div>
-        <!-- LOGOUT BUTTON ADDED HERE -->
         <button id="adminLogoutBtn" class="logout-btn">Log Out</button>
     </header>
 
@@ -644,7 +666,7 @@
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td>${u.name}</td>
-                    <td><span class="badge" style="background: rgba(255,193,7,0.1); color: #ffeb3b;">${u.email}</span></td>
+                    <td><span class="badge" style="background: rgba(0, 123, 255, 0.1); color: var(--color-accent-blue);">${u.email}</span></td>
                     <td>${u.role}</td>
                     <td><button class="btn-sm btn-danger" data-id="${u.id}">Delete</button></td>
                 `;
@@ -866,7 +888,6 @@
 
         function handleAdminLogout() {
             localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
-            // Use window.location.href assignment which is more robust in non-standard execution environments
             window.location.href = './login.html'; 
         }
         
